@@ -4,7 +4,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +43,18 @@ public class PacienteController {
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Optional<Paciente>> listarId(@PathVariable("id") Integer id){
-		Optional<Paciente> pac =  service.listarId(id);
-		
-		if(!pac.isPresent()) {
+	public Resource<Paciente> listarPorId(@PathVariable("id") Integer id) {
+		Paciente pac = service.listarId(id);
+		if(pac == null) {
 			throw new ModeloNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		return new ResponseEntity<Optional<Paciente>>(pac,HttpStatus.OK);
+		
+		Resource<Paciente> resource = new Resource<Paciente>(pac);
+	
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).listarPorId(id));
+		resource.add(linkTo.withRel("paciente-resource"));
+		
+		return resource;
 	}
 	
 	
@@ -70,11 +82,11 @@ public class PacienteController {
 	*/
 	
 	@DeleteMapping(value = "/{id}")
-	public void eliminar(@PathVariable("id") Integer id){
-		Optional<Paciente> pac = service.listarId(id);
-		if(!pac.isPresent()) {
-			throw new ModeloNotFoundException("ID NO ENCONTRADO" + id);
-		}else {
+	public void elminar(@PathVariable("id") Integer id) {
+		Paciente pac = service.listarId(id);
+		if (pac == null) {
+			throw new ModeloNotFoundException("ID NO ENCONTRADO: " + id);
+		} else {
 			service.eliminar(id);
 		}
 	}

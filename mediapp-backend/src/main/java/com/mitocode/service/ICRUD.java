@@ -3,6 +3,8 @@ package com.mitocode.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.mitocode.model.Paciente;
+
 
 
 /*
@@ -13,12 +15,9 @@ import java.util.Optional;
  *si lo utiliza medico se comportara como medico
  */
 public interface ICRUD<T> {
-	//Paciente registrar(Paciente pac)
 	T registrar(T t);
 	T modificar(T t);
 	void eliminar(int id);
-	Optional<T> listarId(int id);
-	//T listId(int id);
+	T listarId(int id);
 	List<T> listar();
-	//Optional<T> listarId(int id);
 }

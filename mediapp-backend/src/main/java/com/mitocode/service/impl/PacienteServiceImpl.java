@@ -1,7 +1,6 @@
 package com.mitocode.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +27,12 @@ public class PacienteServiceImpl implements IPacienteService {
 
 	@Override
 	public void eliminar(int id) {
-		dao.deleteById(id);
+		dao.delete(id);
 	}
 
 	@Override
-	public Optional<Paciente> listarId(int id) {
-		return dao.findById(id);
+	public Paciente listarId(int id) {
+		return dao.findOne(id);
 	}
 
 	@Override
